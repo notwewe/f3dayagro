@@ -23,23 +23,43 @@ if ($result && mysqli_num_rows($result) > 0) {
     $profile_not_found = true;
 }
 
+// Fetch username based on uniqueid
+$sql_username = "SELECT username FROM tbluseraccount WHERE userid = '$uniqueid'";
+$result_username = mysqli_query($connection, $sql_username);
+
+// Check if username exists
+if ($result_username && mysqli_num_rows($result_username) > 0) {
+    $username_row = mysqli_fetch_assoc($result_username);
+    $username = $username_row['username'];
+} else {
+    // Set default username if not found
+    $username = "Unknown";
+}
+
 // Handle form submission for updating profile
 if(isset($_POST['saveProfile'])){
     // Retrieve updated values from form
+    $username = escape($_POST['username']); // Updated username
     $firstname = escape($_POST['firstname']);
     $lastname = escape($_POST['lastname']);
 
-    // Update the user's profile in the database
-    $update_sql = "UPDATE tbluserprofile SET firstname='$firstname', lastname='$lastname' WHERE userid='$uniqueid'";
-    $update_result = mysqli_query($connection, $update_sql);
+    // Update the username in tbluseraccount
+    $update_account_sql = "UPDATE tbluseraccount SET username='$username' WHERE userid='$uniqueid'";
+    $update_account_result = mysqli_query($connection, $update_account_sql);
 
-    if($update_result){
+    // Update the user's profile in the database
+    $update_profile_sql = "UPDATE tbluserprofile SET firstname='$firstname', lastname='$lastname', username= '$username' WHERE userid='$uniqueid'";
+    $update_result = mysqli_query($connection, $update_profile_sql);
+
+    if($update_result && $update_account_result){
         // Profile updated successfully
         $_SESSION['alert_message'] = 'Profile updated successfully!';
         $_SESSION['alert_type'] = 'success';
         // Update profile variable with new values
         $profile['firstname'] = $firstname;
         $profile['lastname'] = $lastname;
+        $profile['username'] = $username;
+
     } else {
         // Failed to update profile
         $_SESSION['alert_message'] = 'Failed to update profile';
@@ -94,6 +114,9 @@ if(isset($_POST['deleteAccount'])){
             <?php include 'alert.php'; ?> <!-- Include alert message -->
             <!-- Display user's profile information -->
             <form method="post" action="">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="editable" value="<?php echo escape($username); ?>" <?php echo isset($_POST['editProfile']) ? '' : 'readonly'; ?>>
+
                 <label for="firstname">First Name:</label>
                 <input type="text" id="firstname" name="firstname" class="editable" value="<?php echo escape($profile['firstname']); ?>" <?php echo isset($_POST['editProfile']) ? '' : 'readonly'; ?>>
 

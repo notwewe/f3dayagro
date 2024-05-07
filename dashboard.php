@@ -38,8 +38,14 @@ if ($username === "Guest") {
             <button type="submit" class="view-products-btn">View Wishlist</button>
         </form> <br>
 
+        <!-- Button to view cart -->
         <form action="cart.php" method="GET">
             <button type="submit" class="view-products-btn">View Cart</button>
+        </form> <br>
+
+        <!-- Button to view report -->
+        <form action="report.php" method="GET">
+            <button type="submit" class="view-products-btn">View Report</button>
         </form>
 
         <!-- Buttons for Edit Profile and Delete Account -->
