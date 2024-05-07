@@ -55,7 +55,7 @@ $result = mysqli_query($connection, $sql);
                         echo "<tr>";
                         echo "<td>".$row['ProductID']."</td>";
                         echo "<td>".$row['ProductName']."</td>";
-                        echo "<td>$".$row['ProductPrice']."</td>";
+                        echo "<td>₱".$row['ProductPrice']."</td>";
                         echo "<td>".$row['ProductDesc']."</td>";
                         echo "<td>";
                         echo "<form method='post'>";
