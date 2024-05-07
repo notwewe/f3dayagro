@@ -34,7 +34,7 @@ if(isset($_POST['cart_id']) && isset($_POST['quantity'])) {
     mysqli_query($connection, $update_cart_query);
 }
 ?>
-
+<!-- asdsad -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
